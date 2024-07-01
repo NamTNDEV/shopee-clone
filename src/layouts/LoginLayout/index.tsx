@@ -1,3 +1,6 @@
+import Footer from 'src/components/Footer'
+import LoginHeader from 'src/components/LoginHeader'
+
 interface PropsType {
   children?: React.ReactNode
 }
@@ -5,8 +8,9 @@ interface PropsType {
 function LoginLayout({ children }: PropsType) {
   return (
     <div>
-      LoginLayout
+      <LoginHeader />
       {children}
+      <Footer />
     </div>
   )
 }
