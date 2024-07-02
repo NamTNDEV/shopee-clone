@@ -1,8 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+import { registerUser } from 'src/api/auth.api'
 import Input from 'src/components/form/Input'
 import { registerSchema, RegisterSchema } from 'src/utils/rules'
+import { omit as _omit } from 'lodash'
 
 type FormData = RegisterSchema
 
@@ -13,8 +16,15 @@ function RegisterPage() {
     formState: { errors }
   } = useForm<FormData>({ resolver: yupResolver(registerSchema) })
 
+  const registerUserMutation = useMutation({
+    mutationFn: (body: Omit<FormData, 'confirm_password'>) => registerUser(body)
+  })
+
   const onsubmit = handleSubmit((data) => {
-    console.log(data)
+    const registerData = _omit(data, ['confirm_password'])
+    registerUserMutation.mutate(registerData, {
+      onSuccess: (data) => console.log(data)
+    })
   })
 
   return (
