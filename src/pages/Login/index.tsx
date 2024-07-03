@@ -1,7 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { login } from 'src/api/auth.api'
 import Input from 'src/components/form/Input'
+import { ResponseApi } from 'src/types/ultis.type'
+import { isAxiosUnprocessableEntityError } from 'src/utils/errors'
 import { LoginSchema, loginSchema } from 'src/utils/rules'
 
 type FormData = LoginSchema
@@ -10,11 +15,36 @@ function RegisterPage() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors }
   } = useForm<FormData>({ resolver: yupResolver(loginSchema) })
 
+  const loginMutation = useMutation({
+    mutationFn: (body: FormData) => login(body),
+    onSuccess: (data) => {
+      if (data) {
+        console.log(data)
+        toast.success('Đăng nhập thành công.')
+      }
+    },
+    onError: (error) => {
+      console.log(error)
+      if (isAxiosUnprocessableEntityError<ResponseApi<FormData>>(error)) {
+        const formError = error.response?.data.data
+        if (formError) {
+          Object.keys(formError).forEach((key) => {
+            setError(key as keyof FormData, {
+              message: formError[key as keyof FormData],
+              type: 'Server'
+            })
+          })
+        }
+      }
+    }
+  })
+
   const onsubmit = handleSubmit((data) => {
-    console.log(data)
+    loginMutation.mutate(data)
   })
 
   return (

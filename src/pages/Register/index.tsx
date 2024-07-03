@@ -8,6 +8,7 @@ import { registerSchema, RegisterSchema } from 'src/utils/rules'
 import { omit as _omit } from 'lodash'
 import { isAxiosUnprocessableEntityError } from 'src/utils/errors'
 import { ResponseApi } from 'src/types/ultis.type'
+import { toast } from 'react-toastify'
 
 type FormData = RegisterSchema
 
@@ -20,27 +21,30 @@ function RegisterPage() {
   } = useForm<FormData>({ resolver: yupResolver(registerSchema) })
 
   const registerUserMutation = useMutation({
-    mutationFn: (body: Omit<FormData, 'confirm_password'>) => registerUser(body)
+    mutationFn: (body: Omit<FormData, 'confirm_password'>) => registerUser(body),
+    onSuccess: (data) => {
+      console.log(data)
+      toast.success('Đăng kí tài khoản thành công.')
+    },
+    onError: (error) => {
+      console.log(error)
+      if (isAxiosUnprocessableEntityError<ResponseApi<Omit<FormData, 'confirm_password'>>>(error)) {
+        const formError = error.response?.data.data
+        if (formError) {
+          Object.keys(formError).forEach((key) => {
+            setError(key as keyof Omit<FormData, 'confirm_password'>, {
+              message: formError[key as keyof Omit<FormData, 'confirm_password'>],
+              type: 'Server'
+            })
+          })
+        }
+      }
+    }
   })
 
   const onsubmit = handleSubmit((data) => {
     const registerData = _omit(data, ['confirm_password'])
-    registerUserMutation.mutate(registerData, {
-      onSuccess: (data) => console.log(data),
-      onError: (error) => {
-        if (isAxiosUnprocessableEntityError<ResponseApi<Omit<FormData, 'confirm_password'>>>(error)) {
-          const formError = error.response?.data.data
-          if (formError) {
-            Object.keys(formError).forEach((key) => {
-              setError(key as keyof Omit<FormData, 'confirm_password'>, {
-                message: formError[key as keyof Omit<FormData, 'confirm_password'>],
-                type: 'Server'
-              })
-            })
-          }
-        }
-      }
-    })
+    registerUserMutation.mutate(registerData)
   })
 
   return (

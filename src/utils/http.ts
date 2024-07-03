@@ -18,15 +18,16 @@ class Http {
         return res
       },
       function (error: AxiosError) {
+        let message
         if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const data: any | undefined = error.response?.data
-          const message = data.message || error.message
+          message = data.message || error.message
           toast.error(message, {
             position: 'bottom-left'
           })
-          return Promise.reject(message)
         }
+        return Promise.reject(error)
       }
     )
   }
