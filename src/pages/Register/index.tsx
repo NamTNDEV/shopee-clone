@@ -11,6 +11,7 @@ import { ErrorResponseApi } from 'src/types/ultis.type'
 import { toast } from 'react-toastify'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
+import Button from 'src/components/Button'
 
 type FormData = RegisterSchema
 
@@ -85,12 +86,13 @@ function RegisterPage() {
                 errorMessage={errors.confirm_password?.message || ''}
               />
               <div className='mt-3'>
-                <button
-                  type='submit'
-                  className='w-full text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600'
+                <Button
+                  className='w-full py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600 flex justify-center items-center'
+                  isLoading={registerUserMutation.isPending}
+                  disabled={registerUserMutation.isPending}
                 >
                   Đăng ký
-                </button>
+                </Button>
               </div>
               <div className='flex items-center justify-center mt-8'>
                 <span className='text-gray-400'>Bạn đã có tài khoản?</span>
