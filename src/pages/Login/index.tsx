@@ -1,17 +1,22 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
+import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { login } from 'src/api/auth.api'
 import Input from 'src/components/form/Input'
-import { ResponseApi } from 'src/types/ultis.type'
+import { AppContext } from 'src/contexts/app.context'
+import { ErrorResponseApi } from 'src/types/ultis.type'
 import { isAxiosUnprocessableEntityError } from 'src/utils/errors'
 import { LoginSchema, loginSchema } from 'src/utils/rules'
 
 type FormData = LoginSchema
 
 function RegisterPage() {
+  const { setIsAuth } = useContext(AppContext)
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
@@ -23,13 +28,14 @@ function RegisterPage() {
     mutationFn: (body: FormData) => login(body),
     onSuccess: (data) => {
       if (data) {
-        console.log(data)
         toast.success('Đăng nhập thành công.')
+        setIsAuth(Boolean(data))
+        navigate('/')
       }
     },
     onError: (error) => {
       console.log(error)
-      if (isAxiosUnprocessableEntityError<ResponseApi<FormData>>(error)) {
+      if (isAxiosUnprocessableEntityError<ErrorResponseApi<FormData>>(error)) {
         const formError = error.response?.data.data
         if (formError) {
           Object.keys(formError).forEach((key) => {
