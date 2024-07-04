@@ -12,11 +12,12 @@ import { toast } from 'react-toastify'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import Button from 'src/components/Button'
+import { path } from 'src/constants/path'
 
 type FormData = RegisterSchema
 
 function RegisterPage() {
-  const { setIsAuth } = useContext(AppContext)
+  const { setIsAuth, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
 
   const {
@@ -30,7 +31,8 @@ function RegisterPage() {
     mutationFn: (body: Omit<FormData, 'confirm_password'>) => registerUser(body),
     onSuccess: (data) => {
       toast.success('Đăng kí tài khoản thành công.')
-      setIsAuth(Boolean(data))
+      setIsAuth(true)
+      setProfile(data.data.data.user)
       navigate('/')
     },
     onError: (error) => {
@@ -96,7 +98,7 @@ function RegisterPage() {
               </div>
               <div className='flex items-center justify-center mt-8'>
                 <span className='text-gray-400'>Bạn đã có tài khoản?</span>
-                <Link className='text-red-400 ml-1' to='/login'>
+                <Link className='text-red-400 ml-1' to={path.login}>
                   Đăng nhập
                 </Link>
               </div>

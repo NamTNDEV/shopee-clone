@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import { login } from 'src/api/auth.api'
 import Button from 'src/components/Button'
 import Input from 'src/components/form/Input'
+import { path } from 'src/constants/path'
 import { AppContext } from 'src/contexts/app.context'
 import { ErrorResponseApi } from 'src/types/ultis.type'
 import { isAxiosUnprocessableEntityError } from 'src/utils/errors'
@@ -15,7 +16,7 @@ import { LoginSchema, loginSchema } from 'src/utils/rules'
 type FormData = LoginSchema
 
 function RegisterPage() {
-  const { setIsAuth } = useContext(AppContext)
+  const { setIsAuth, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
 
   const {
@@ -32,7 +33,8 @@ function RegisterPage() {
         toast.success('Đăng nhập thành công.', {
           autoClose: 200
         })
-        setIsAuth(Boolean(data))
+        setIsAuth(true)
+        setProfile(data.data.data.user)
         navigate('/')
       }
     },
@@ -91,7 +93,7 @@ function RegisterPage() {
               </div>
               <div className='flex items-center justify-center mt-8'>
                 <span className='text-gray-400'>Bạn đã có tài khoản?</span>
-                <Link className='text-red-400 ml-1' to='/register'>
+                <Link className='text-red-400 ml-1' to={path.register}>
                   Đăng ký
                 </Link>
               </div>
