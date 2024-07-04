@@ -1,5 +1,5 @@
 import { ReactNode, useRef, useState, useId, ElementType } from 'react'
-import { FloatingArrow, FloatingPortal, arrow, shift, useFloating } from '@floating-ui/react'
+import { FloatingArrow, FloatingPortal, Placement, arrow, shift, useFloating } from '@floating-ui/react'
 import { motion } from 'framer-motion'
 
 interface Props {
@@ -8,16 +8,33 @@ interface Props {
   className?: string
   as?: ElementType
   initialOpen?: boolean
+  placement?: Placement
+  customX?: number
+  customY?: number
+  arrowX?: number
+  customTransformOrigin?: number
 }
 
-function Popover({ children, renderPopover, className, as: Element = 'div', initialOpen = false }: Props) {
+function Popover({
+  children,
+  renderPopover,
+  className,
+  as: Element = 'div',
+  initialOpen = false,
+  placement,
+  customX = 0,
+  customY = 0,
+  arrowX = 0,
+  customTransformOrigin = 0
+}: Props) {
   const [isOpen, setIsOpen] = useState(initialOpen)
   const arrowRef = useRef<SVGSVGElement>(null)
   const id = useId()
 
   const { refs, strategy, x, y, context, middlewareData } = useFloating({
     open: isOpen,
-    middleware: [arrow({ element: arrowRef }), shift()]
+    middleware: [arrow({ element: arrowRef }), shift()],
+    placement: placement
   })
 
   const showPopover = () => setIsOpen(true)
@@ -32,10 +49,10 @@ function Popover({ children, renderPopover, className, as: Element = 'div', init
             ref={refs.setFloating}
             style={{
               position: strategy,
-              top: y || 0,
-              left: x - 28 || 0,
+              top: y + customY || 0,
+              left: x + customX || 0,
               width: 'max-content',
-              transformOrigin: `${middlewareData.arrow?.x && middlewareData.arrow?.x + 40}px top`
+              transformOrigin: `${middlewareData.arrow?.x && middlewareData.arrow?.x + customTransformOrigin}px top`
             }}
             initial={{ opacity: 0, transform: 'scale(0)' }}
             animate={{ opacity: 1, transform: 'scale(1)' }}
@@ -47,7 +64,7 @@ function Popover({ children, renderPopover, className, as: Element = 'div', init
               context={context}
               width={28}
               className='fill-white'
-              style={{ transform: 'translateX(-25px)' }}
+              style={{ transform: `translateX(${arrowX}px)` }}
             />
             {renderPopover}
           </motion.div>
