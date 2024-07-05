@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { login } from 'src/api/auth.api'
+import AuthApi from 'src/api/auth.api'
 import Button from 'src/components/Button'
 import Input from 'src/components/form/Input'
 import { path } from 'src/constants/path'
@@ -27,7 +27,7 @@ function RegisterPage() {
   } = useForm<FormData>({ resolver: yupResolver(loginSchema) })
 
   const loginMutation = useMutation({
-    mutationFn: (body: FormData) => login(body),
+    mutationFn: (body: FormData) => AuthApi.login(body),
     onSuccess: (data) => {
       if (data) {
         toast.success('Đăng nhập thành công.', {

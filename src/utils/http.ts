@@ -1,8 +1,8 @@
 import axios, { AxiosError, type AxiosInstance } from 'axios'
 import { toast } from 'react-toastify'
-import HttpStatusCode from 'src/constants/httpStatusCode.enum'
 import { AuthResponse } from 'src/types/auth.type'
 import { clearLS, getAccessTokenFromLS, saveAccessTokenToLS, setProfileToLS } from './auth'
+import HttpStatusCode from 'src/types/httpStatusCode.enum'
 import { path } from 'src/constants/path'
 
 class Http {

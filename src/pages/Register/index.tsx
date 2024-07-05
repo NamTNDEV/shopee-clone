@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { registerUser } from 'src/api/auth.api'
+import AuthApi from 'src/api/auth.api'
 import Input from 'src/components/form/Input'
 import { registerSchema, RegisterSchema } from 'src/utils/rules'
 import { omit as _omit } from 'lodash'
@@ -28,7 +28,7 @@ function RegisterPage() {
   } = useForm<FormData>({ resolver: yupResolver(registerSchema) })
 
   const registerUserMutation = useMutation({
-    mutationFn: (body: Omit<FormData, 'confirm_password'>) => registerUser(body),
+    mutationFn: (body: Omit<FormData, 'confirm_password'>) => AuthApi.register(body),
     onSuccess: (data) => {
       toast.success('Đăng kí tài khoản thành công.')
       setIsAuth(true)

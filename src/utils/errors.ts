@@ -1,6 +1,6 @@
 /* eslint-disable import/no-named-as-default-member */
 import axios, { AxiosError } from 'axios'
-import HttpStatusCode from 'src/constants/httpStatusCode.enum'
+import HttpStatusCode from 'src/types/httpStatusCode.enum'
 
 export const isAxiosError = <T>(error: unknown): error is AxiosError<T> => {
   return axios.isAxiosError(error)
