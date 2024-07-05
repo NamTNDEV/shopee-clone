@@ -4,8 +4,10 @@ import Product from './Product'
 import SortProductList from './SortProduct'
 import { useQuery } from '@tanstack/react-query'
 import ProductApi from 'src/api/product.api'
-
+import Pagination from 'src/components/Pagination'
+import { useState } from 'react'
 export default function ProductList() {
+  const [page, setPage] = useState<number>(1)
   const queryParams = useQueryParams()
   const { data: productsData } = useQuery({
     queryKey: ['products', queryParams],
@@ -27,6 +29,7 @@ export default function ProductList() {
               {productsData &&
                 productsData.data.data.products.map((product) => <Product key={product._id} product={product} />)}
             </div>
+            {true ? <Pagination page={page} setPage={setPage} totalPages={6} /> : null}
           </div>
         </div>
       </div>
