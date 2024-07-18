@@ -41,6 +41,7 @@ export default function ProductList() {
     queryKey: ['categories'],
     queryFn: () => CategoryApi.getCategories()
   })
+
   return (
     <div className='bg-gray-200 py-6'>
       <div className='container'>
