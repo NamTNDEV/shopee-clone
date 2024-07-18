@@ -41,7 +41,6 @@ export default function ProductList() {
     queryKey: ['categories'],
     queryFn: () => CategoryApi.getCategories()
   })
-
   return (
     <div className='bg-gray-200 py-6'>
       <div className='container'>
@@ -74,7 +73,7 @@ export default function ProductList() {
                 </svg>
                 <span className='sr-only'>Loading...</span>
               </div>
-            ) : productsData ? (
+            ) : productsData && Number(productsData?.data.data.products.length || 0) > 0 ? (
               <>
                 <div className='mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
                   {productsData.data.data.products.map((product) => (

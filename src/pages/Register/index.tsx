@@ -36,7 +36,6 @@ function RegisterPage() {
       navigate('/')
     },
     onError: (error) => {
-      console.log(error)
       if (isAxiosUnprocessableEntityError<ErrorResponseApi<Omit<FormData, 'confirm_password'>>>(error)) {
         const formError = error.response?.data.data
         if (formError) {

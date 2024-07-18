@@ -40,7 +40,6 @@ function Pagination({ queryConfigs, totalPages }: PropsInterface) {
       .fill(0)
       .map((_, index) => {
         const pageNumber = index + 1
-        console.log(page === pageNumber)
         if (page < RANGE * 2 + 2 && pageNumber > page + RANGE && pageNumber < totalPages - RANGE + 1) {
           return renderDotAfter(index)
         } else if (page > RANGE * 2 + 1 && page < totalPages - RANGE * 2) {

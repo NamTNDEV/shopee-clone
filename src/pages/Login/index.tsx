@@ -39,7 +39,6 @@ function RegisterPage() {
       }
     },
     onError: (error) => {
-      console.log(error)
       if (isAxiosUnprocessableEntityError<ErrorResponseApi<FormData>>(error)) {
         const formError = error.response?.data.data
         if (formError) {
