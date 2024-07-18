@@ -7,6 +7,7 @@ import ProductApi from 'src/api/product.api'
 import Pagination from 'src/components/Pagination'
 import { ProductListConfig } from 'src/types/product.type'
 import { omitBy as _omit, isUndefined } from 'lodash'
+import CategoryApi from 'src/api/category.api'
 
 export type QueryConfig = {
   [key in keyof ProductListConfig]: string
@@ -24,7 +25,8 @@ export default function ProductList() {
       price_max: queryParams.price_max,
       price_min: queryParams.price_min,
       rating_filter: queryParams.rating_filter,
-      sort_by: queryParams.sort_by
+      sort_by: queryParams.sort_by,
+      category: queryParams.category
     },
     isUndefined
   )
@@ -35,12 +37,17 @@ export default function ProductList() {
     placeholderData: keepPreviousData
   })
 
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => CategoryApi.getCategories()
+  })
+
   return (
     <div className='bg-gray-200 py-6'>
       <div className='container'>
         <div className='grid grid-cols-12 gap-6'>
           <div className='col-span-3'>
-            <AsideFilter />
+            <AsideFilter queryConfigs={queryConfigs} categories={categories?.data.data || []} />
           </div>
           <div className='col-span-9'>
             <SortProductList
