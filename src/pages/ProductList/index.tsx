@@ -17,7 +17,7 @@ export default function ProductList() {
   const queryConfigs: QueryConfig = _omit(
     {
       page: queryParams.page || '1',
-      limit: queryParams.limit || '5',
+      limit: queryParams.limit || '20',
       exclude: queryParams.exclude,
       name: queryParams.name,
       order: queryParams.order,
@@ -43,7 +43,10 @@ export default function ProductList() {
             <AsideFilter />
           </div>
           <div className='col-span-9'>
-            <SortProductList />
+            <SortProductList
+              queryConfigs={queryConfigs}
+              totalPages={productsData?.data.data.pagination.page_size || 0}
+            />
             {isLoading ? (
               <div role='status' className='flex flex-wrap justify-center mt-7'>
                 <svg
