@@ -7,10 +7,11 @@ import InputNumber from 'src/components/form/InputNumber'
 import ProductRating from 'src/components/ProductRating'
 import { Product } from 'src/types/product.type'
 import FormatUtils from 'src/utils/format'
-import { rateSale } from 'src/utils/other'
+import { getIdFromNameId, rateSale } from 'src/utils/other'
 
 function ProductDetail() {
-  const { id } = useParams()
+  const { nameId } = useParams()
+  const id = getIdFromNameId(nameId as string)
   const [currentIndexImages, setCurrentIndexImages] = useState<number[]>([0, 5])
   const [activeImage, setActiveImage] = useState<string>('')
   const imageRef = useRef<HTMLImageElement>(null)
