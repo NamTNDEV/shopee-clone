@@ -34,7 +34,8 @@ export default function ProductList() {
   const { data: productsData, isLoading } = useQuery({
     queryKey: ['products', queryParams],
     queryFn: () => ProductApi.getProducts(queryConfigs as ProductListConfig),
-    placeholderData: keepPreviousData
+    placeholderData: keepPreviousData,
+    staleTime: 3 * 60 * 1000
   })
 
   const { data: categories } = useQuery({
